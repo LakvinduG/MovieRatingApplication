@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'api_service.dart';
-import 'detail_screen.dart'; // Import your detail screen
-import 'search_screen.dart'; // Import your search screen
+import 'package:oneflix/api/api_service.dart';
+import 'detail_screen.dart'; 
+import 'search_screen.dart'; 
 
 class HomeScreen extends StatefulWidget {
   @override

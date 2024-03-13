@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'api_service.dart';
+import 'package:oneflix/api/api_service.dart';
 import 'detail_screen.dart'; // Import your detail screen
 
 class SearchScreen extends StatefulWidget {

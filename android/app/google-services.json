@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "578557102151",
+    "project_id": "test1-10ea7",
+    "storage_bucket": "test1-10ea7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578557102151:android:64dcdfad98e39045f2c962",
+        "android_client_info": {
+          "package_name": "com.example.oneflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxYeYva5cGzbQDLvToQHYfZh2B_rInSy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
