@@ -15,6 +15,8 @@ dependencies:
   firebase_ui_auth: ^1.7.0
   firebase_auth: ^4.16.0
   firebase_core: ^2.24.2
+  shared_preferences: ^2.0.15
+
   
 
 dev_dependencies:
@@ -26,5 +28,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/assets/OneFlixLogo1.png
-
+    - assets/

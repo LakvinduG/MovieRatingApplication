@@ -15,11 +15,26 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  
     return MaterialApp(
-      title: 'Your App Title Here', // Update the title as needed
-      home: AuthGate(), // Your AuthGate or similar root widget
-      // Consider adding routes and theme as in your second main.dart if needed
+      debugShowCheckedModeBanner: false,
+      title: 'Movie Rating App',
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.transparent,
+        colorScheme: ColorScheme.dark(
+          primary: Color.fromARGB(255, 0, 238, 255), // Dark gray color
+        ),
+      ),
+      builder: (context, child) {
+        return Scaffold(
+          body: SafeArea(
+            child: Container(
+              color: Colors.transparent, // Transparent color to allow the background color to show
+              child: child,
+            ),
+          ),
+        );
+      },
+      home: const AuthGate(),
     );
   }
 }

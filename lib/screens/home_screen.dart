@@ -4,6 +4,7 @@ import 'package:oneflix/api/api_service.dart';
 import 'detail_screen.dart'; 
 import 'search_screen.dart'; 
 
+
 class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -84,7 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.network(
-                                  'https://image.tmdb.org/t/p/w500${movie['backdrop_path']}',
+                                  movie['backdrop_path'] != null
+                                    ? 'https://image.tmdb.org/t/p/w500${movie['backdrop_path']}'
+                                    : '', // Custom image URL
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -142,7 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    'https://image.tmdb.org/t/p/w500${item['poster_path']}',
+                                    item['poster_path'] != null
+                                      ? 'https://image.tmdb.org/t/p/w500${item['poster_path']}'
+                                      : 'assets/imgerror.jpg', // Custom image URL
                                     fit: BoxFit.cover,
                                   ),
                                 ),
