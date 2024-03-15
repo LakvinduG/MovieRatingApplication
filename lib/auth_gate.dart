@@ -3,6 +3,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oneflix/screens/home_screen.dart';
 
+
 class AuthGate extends StatelessWidget {
  const AuthGate({super.key});
 
@@ -21,7 +22,7 @@ class AuthGate extends StatelessWidget {
                padding: const EdgeInsets.all(20),
                child: AspectRatio(
                  aspectRatio: 1,
-                 child: Image.asset('OneFlixLogo1.png'),
+                 child: Image.asset('assets/images/OneFlixLogo1.png'),
                ),
              );
            },
@@ -29,16 +30,16 @@ class AuthGate extends StatelessWidget {
              return Padding(
                padding: const EdgeInsets.symmetric(vertical: 8.0),
                child: action == AuthAction.signIn
-                   ? const Text('Welcome to FlutterFire, please sign in!')
-                   : const Text('Welcome to Flutterfire, please sign up!'),
+                   ? const Text('Welcome to OneFlix')
+                   : const Text('please sign up!'),
              );
            },
            footerBuilder: (context, action) {
              return const Padding(
                padding: EdgeInsets.only(top: 16),
                child: Text(
-                 'By signing in, you agree to our terms and conditions.',
-                 style: TextStyle(color: Colors.grey),
+                 'OneFlix, Where everything about movies at ONE place',
+                 style: TextStyle(color: Color.fromARGB(255, 0, 251, 255)),
                ),
              );
            },
@@ -47,7 +48,7 @@ class AuthGate extends StatelessWidget {
                padding: const EdgeInsets.all(20),
                child: AspectRatio(
                  aspectRatio: 1,
-                 child: Image.asset('flutterfire_300x.png'),
+                 child: Image.asset('assets/images/OneFlixLogo1.png'),
                ),
              );
            },

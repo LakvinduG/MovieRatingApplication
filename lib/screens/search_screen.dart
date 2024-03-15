@@ -1,17 +1,20 @@
 // Import Flutter Material package and other necessary packages
 import 'package:flutter/material.dart';
 import 'package:oneflix/api/api_service.dart';
-import 'detail_screen.dart'; // Make sure this points to your actual DetailScreen widget
+import 'detail_screen.dart'; // Ensure this points to your actual DetailScreen widget
 import 'search_history_screen.dart'; // Ensure this points to your actual SearchHistoryScreen widget
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Define enum for search modes
 enum SearchMode { byTitle, byActor, byTwoActors }
 
+// SearchScreen StatefulWidget
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
+// State class for SearchScreen
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ApiService _apiService = ApiService();
@@ -71,7 +74,8 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     try {
-      List<dynamic> results = await _apiService.searchMovies(query);
+      List<dynamic> results = await _apiService.searchMovies(query); // Adjust this call according to your API service
+
       setState(() {
         _searchResults = results;
       });
@@ -92,8 +96,8 @@ class _SearchScreenState extends State<SearchScreen> {
             onSelected: (SearchMode result) {
               setState(() {
                 _searchMode = result;
-                _searchResults.clear();
-                _searchController.clear();
+                _searchResults.clear(); // Clear results on mode change
+                _searchController.clear(); // Clear the search field
               });
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<SearchMode>>[
@@ -114,10 +118,12 @@ class _SearchScreenState extends State<SearchScreen> {
           IconButton(
             icon: Icon(Icons.history),
             onPressed: () async {
+              // Await the result from the SearchHistoryScreen
               final selectedQuery = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchHistoryScreen()),
+                MaterialPageRoute(builder: (context) => SearchHistoryScreen()), // Adjust for your actual SearchHistoryScreen widget
               );
+              // Use the selected query to update the search field and perform a search
               if (selectedQuery != null) {
                 _searchController.text = selectedQuery;
                 _onSearchTextChanged();
@@ -149,7 +155,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchResults() {
     if (_searchResults.isEmpty) {
-      return Center(child: Text('No results found'));
+      return Center(
+        child: Text('No results found'),
+      );
     } else {
       return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -165,15 +173,14 @@ class _SearchScreenState extends State<SearchScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DetailScreen(item)),
+                MaterialPageRoute(builder: (context) => DetailScreen(item)), // Adjust for your actual DetailScreen widget
               );
-              SearchHistoryScreen._addSearchHistory(item['id'][index]);
             },
             child: Card(
               elevation: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [                               
+                children: [
                   Expanded(
                     child: item['poster_path'] != null
                         ? Image.network(

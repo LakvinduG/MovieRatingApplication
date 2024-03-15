@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:oneflix/api/api_service.dart';
-import 'detail_screen.dart'; 
-import 'search_screen.dart'; 
-
+import 'detail_screen.dart'; // Adjust if your structure is different
+import 'search_screen.dart'; // Adjust if your structure is different
+import 'package:oneflix/profile_screen.dart'; // Ensure this is correctly pointing to your ProfileScreen
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       if (_pageController.hasClients) {
         int nextPage = _pageController.page!.toInt() + 1;
-        if (nextPage == _pageController.positions.length) {
+        if (nextPage >= _pageController.positions.length) {
           nextPage = 0; // Go back to the first item if reached the end
         }
         _pageController.animateToPage(
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ),
         SizedBox(
-          height: isNowPlaying ? 200 : 300, // Adjust height based on the section
+          height: isNowPlaying ? 200 : 300,
           child: FutureBuilder<List<dynamic>>(
             future: future,
             builder: (context, snapshot) {
@@ -62,105 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if (snapshot.hasError) {
                 return Text("Error: ${snapshot.error}");
               } else if (snapshot.hasData) {
-                if (isNowPlaying) {
-                  // Landscape images for Now Playing section
-                  return GestureDetector(
-                    onTap: () {
-                      // Navigate to detail screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DetailScreen(snapshot.data![_pageController.page!.toInt()])),
-                      );
-                    },
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        var movie = snapshot.data![index];
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  movie['backdrop_path'] != null
-                                    ? 'https://image.tmdb.org/t/p/w500${movie['backdrop_path']}'
-                                    : '', // Custom image URL
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 8,
-                                left: 8,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      movie['title'] ?? movie['name'],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      'Rating: ${movie['vote_average'].toString()}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  // Vertical list for other sections
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      var item = snapshot.data![index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DetailScreen(item)),
-                          );
-                        },
-                        child: Container(
-                          width: 180,
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    item['poster_path'] != null
-                                      ? 'https://image.tmdb.org/t/p/w500${item['poster_path']}'
-                                      : 'assets/imgerror.jpg', // Custom image URL
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Text(item['title'] ?? item['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16)),
-                              Text('Rating: ${item['vote_average'].toString()}', style: TextStyle(fontSize: 14)),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
+                return isNowPlaying ? _buildNowPlayingSection(snapshot.data) : _buildOtherSections(snapshot.data);
               } else {
                 return Text("No data");
               }
@@ -171,31 +73,119 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildNowPlayingSection(List<dynamic>? data) {
+    return PageView.builder(
+      controller: _pageController,
+      itemCount: data!.length,
+      itemBuilder: (context, index) {
+        var movie = data[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(movie)));
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOtherSections(List<dynamic>? data) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: data!.length,
+      itemBuilder: (context, index) {
+        var item = data[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(item)));
+          },
+          child: Container(
+            width: 180,
+            margin: EdgeInsets.symmetric(horizontal: 5.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      'https://image.tmdb.org/t/p/w500${item['poster_path']}',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Text(item['title'] ?? item['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16)),
+                Text('Rating: ${item['vote_average'].toString()}', style: TextStyle(fontSize: 14)),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showBottomDrawer() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 250,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: Icon(Icons.account_circle, size: 36),
+                title: Text('Profile', style: TextStyle(fontSize: 18)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+                },
+              ),
+              // Additional drawer items can be added here
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('oneflix'),
-        actions: <Widget>[
+        actions: [
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              // Navigate to search screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
             },
+          ),
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: _showBottomDrawer,
           ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             _buildSection("Now Playing", _apiService.fetchMoviesNowPlaying(), isNowPlaying: true),
+            const SizedBox(height: 50),
             _buildSection("TV On Air Tonight", _apiService.fetchTvOnAirTonight()),
+            const SizedBox(height: 50),
             _buildSection("Best Movies This Year", _apiService.fetchBestMoviesOfYear()),
+            const SizedBox(height: 50),
             _buildSection("Highest Grossing Movies", _apiService.fetchHighestGrossingMoviesOfAllTime()),
           ],
         ),
