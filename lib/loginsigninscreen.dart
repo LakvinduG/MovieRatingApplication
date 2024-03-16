@@ -3,15 +3,17 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oneflix/screens/home_screen.dart';
 
-
+// AuthGate widget that handles authentication state changes
 class AuthGate extends StatelessWidget {
  const AuthGate({super.key});
 
  @override
  Widget build(BuildContext context) {
    return StreamBuilder<User?>(
+     // Listen to authentication state changes
      stream: FirebaseAuth.instance.authStateChanges(),
      builder: (context, snapshot) {
+       // If user is not authenticated, show SignInScreen
        if (!snapshot.hasData) {
          return SignInScreen(
            providers: [
@@ -54,6 +56,7 @@ class AuthGate extends StatelessWidget {
            },
          );
        }
+       // If user is authenticated, show HomeScreen
        return HomeScreen();
      },
    );

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:oneflix/api/api_service.dart';
-import 'detail_screen.dart'; // Adjust if your structure is different
-import 'search_screen.dart'; // Adjust if your structure is different
-import 'package:oneflix/profile_screen.dart'; // Ensure this is correctly pointing to your ProfileScreen
+import 'detail_screen.dart'; 
+import 'search_screen.dart'; 
+import 'package:oneflix/profile_screen.dart'; 
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  //Now playing section with title, future data 
   Widget _buildSection(String title, Future<List<dynamic>> future, {bool isNowPlaying = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  //Now playing section using pageview
   Widget _buildNowPlayingSection(List<dynamic>? data) {
     return PageView.builder(
       controller: _pageController,
@@ -98,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  //Other section with horizontal listview
   Widget _buildOtherSections(List<dynamic>? data) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -132,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  //bottom drawer to access profile section
   void _showBottomDrawer() {
     showModalBottomSheet(
       context: context,
@@ -150,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
                 },
               ),
-              // Additional drawer items can be added here
+              
             ],
           ),
         );

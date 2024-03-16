@@ -16,6 +16,7 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
     _loadSearchHistory();
   }
 
+  // Load search history from Sharedpreferences
   Future<void> _loadSearchHistory() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -23,6 +24,7 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
     });
   }
 
+  // Add a search id to the search history
   static Future<void> _addSearchHistory(String id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     
@@ -35,16 +37,10 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
     // Save the updated search history back to SharedPreferences.
     await prefs.setStringList('searchHistory', _searchHistory);
     
-    // If you're using this in a StatefulWidget and need to update the UI accordingly,
-    // make sure to call setState to trigger a rebuild with the updated search history.
-    // This is assuming this function is part of a State class.
-  //   setState(() {
-  //     // This updates the state variable _searchHistory with the new list.
-  //     this._searchHistory = _searchHistory;
-  // });
+
 }
 
-  // Optionally, you can add a method to clear the search history
+
   Future<void> _clearSearchHistory() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('searchHistory');

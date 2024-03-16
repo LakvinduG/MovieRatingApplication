@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Ensure this file is correctly placed in your project
-import 'auth_gate.dart'; // Assuming AuthGate is your root widget after Firebase initialization
+import 'firebase_options.dart'; 
+import 'loginsigninscreen.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.transparent,
         colorScheme: ColorScheme.dark(
-          primary: Color.fromARGB(255, 0, 238, 255), // Dark gray color
+          primary: Color.fromARGB(255, 0, 238, 255), 
         ),
       ),
       builder: (context, child) {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         );
       },
-      home: const AuthGate(),
+      home: const AuthGate(),// Set AuthGate as the home screen
     );
   }
 }

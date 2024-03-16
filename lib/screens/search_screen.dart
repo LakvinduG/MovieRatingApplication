@@ -1,14 +1,13 @@
-// Import Flutter Material package and other necessary packages
 import 'package:flutter/material.dart';
 import 'package:oneflix/api/api_service.dart';
-import 'detail_screen.dart'; // Ensure this points to your actual DetailScreen widget
-import 'search_history_screen.dart'; // Ensure this points to your actual SearchHistoryScreen widget
+import 'detail_screen.dart'; 
+import 'search_history_screen.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Define enum for search modes
+
 enum SearchMode { byTitle, byActor, byTwoActors }
 
-// SearchScreen StatefulWidget
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -35,6 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
+  // Load the last search query from shared preferences
   Future<void> _loadLastSearchQuery() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? lastSearch = prefs.getString('lastSearch');
@@ -46,6 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  // Save the search query to shared preferences
   Future<void> _saveSearchQuery(String query) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> history = prefs.getStringList('searchHistory') ?? [];
@@ -56,6 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
     await prefs.setString('lastSearch', query);
   }
 
+  // Called when the search text is changed
   void _onSearchTextChanged() {
     String query = _searchController.text.trim();
     if (query.isNotEmpty) {
@@ -68,13 +70,14 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  // Perform the movie search
   void _searchMovies(String query) async {
     setState(() {
       _searchResults.clear();
     });
 
     try {
-      List<dynamic> results = await _apiService.searchMovies(query); // Adjust this call according to your API service
+      List<dynamic> results = await _apiService.searchMovies(query); 
 
       setState(() {
         _searchResults = results;
@@ -92,6 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         title: Text('Search Movies/TV Shows'),
         actions: <Widget>[
+          // Popup menu for selecting search mode
           PopupMenuButton<SearchMode>(
             onSelected: (SearchMode result) {
               setState(() {
@@ -115,15 +119,16 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ],
           ),
+
+          // Button for opening search history screen
           IconButton(
             icon: Icon(Icons.history),
             onPressed: () async {
               // Await the result from the SearchHistoryScreen
               final selectedQuery = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchHistoryScreen()), // Adjust for your actual SearchHistoryScreen widget
+                MaterialPageRoute(builder: (context) => SearchHistoryScreen()), 
               );
-              // Use the selected query to update the search field and perform a search
               if (selectedQuery != null) {
                 _searchController.text = selectedQuery;
                 _onSearchTextChanged();
@@ -134,6 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: Column(
         children: [
+          // Search text field
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -152,7 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-
+  // Build the search results widget
   Widget _buildSearchResults() {
     if (_searchResults.isEmpty) {
       return Center(
@@ -173,7 +179,7 @@ class _SearchScreenState extends State<SearchScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DetailScreen(item)), // Adjust for your actual DetailScreen widget
+                MaterialPageRoute(builder: (context) => DetailScreen(item)), 
               );
             },
             child: Card(
@@ -181,6 +187,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Movie poster or placeholder
                   Expanded(
                     child: item['poster_path'] != null
                         ? Image.network(
@@ -193,6 +200,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             alignment: Alignment.center,
                           ),
                   ),
+
+                  // Movie title and rating
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

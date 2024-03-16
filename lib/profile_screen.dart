@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'auth_gate.dart'; // Make sure this import path is correct
-
+import 'loginsigninscreen.dart'; 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -21,8 +20,7 @@ class ProfileScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Example profile image
-              backgroundColor: Colors.transparent,
+              backgroundImage: NetworkImage('https://via.placeholder.com/150'), 
             ),
             const SizedBox(height: 20),
             const Text(
@@ -33,11 +31,9 @@ class ProfileScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut(); // Sign out from Firebase
-                // After signing out, navigate to the AuthGate (or login screen)
-                // Assuming AuthGate is your root or decides what to display next.
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => AuthGate()),
-                  (Route<dynamic> route) => false,
+                  MaterialPageRoute(builder: (context) => AuthGate()),// Navigate to AuthGate screen and remove all previous screens from the stack
+                  (Route<dynamic> route) => false,// Return false to remove all previous screens
                 );
               },
               child: const Text('Sign Out'),
